@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Tests\Unit;
+
 use App\Creational\SimpleFactory\DoorFactory;
 
 it('make door 100x200', function () {
