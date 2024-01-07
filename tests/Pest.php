@@ -28,9 +28,9 @@ namespace Tests;
 |
 */
 
-//  expect()->extend('toBeOne', function () {
-//      return $this->toBe(1);
-//  });
+expect()->extend('toBeOne', function () {
+    return $this->toBe(1);
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -43,7 +43,7 @@ namespace Tests;
 |
 */
 
-//  function something()
-//  {
-//      // ..
-//  }
+function something(): void
+{
+    // ..
+}
