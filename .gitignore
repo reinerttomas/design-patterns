@@ -3,4 +3,5 @@
 /.idea
 
 # dev
-index.php
+/index.php
+/Makefile
