@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Structural\Adapter;
+namespace App\Structural\Adapter\Hunter;
 
 class WildDogAdapter implements Lion
 {

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use App\Structural\Adapter\AfricanLion;
-use App\Structural\Adapter\AsianLion;
-use App\Structural\Adapter\Hunter;
-use App\Structural\Adapter\WildDog;
-use App\Structural\Adapter\WildDogAdapter;
+use App\Structural\Adapter\Hunter\AfricanLion;
+use App\Structural\Adapter\Hunter\AsianLion;
+use App\Structural\Adapter\Hunter\Hunter;
+use App\Structural\Adapter\Hunter\WildDog;
+use App\Structural\Adapter\Hunter\WildDogAdapter;
 
 it('can hunt african lion', function () {
     $lion = new AfricanLion();
