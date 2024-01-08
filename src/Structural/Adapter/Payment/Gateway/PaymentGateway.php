@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Structural\Adapter\Payment;
+namespace App\Structural\Adapter\Payment\Gateway;
 
 interface PaymentGateway
 {

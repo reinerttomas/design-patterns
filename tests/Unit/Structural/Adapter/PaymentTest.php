@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Structural\Adapter;
 
+use App\Structural\Adapter\Payment\Api\PayPalApi;
+use App\Structural\Adapter\Payment\Api\StripeApi;
+use App\Structural\Adapter\Payment\Gateway\PayPalGateway;
+use App\Structural\Adapter\Payment\Gateway\StripeGateway;
 use App\Structural\Adapter\Payment\PaymentService;
-use App\Structural\Adapter\Payment\PayPalApi;
-use App\Structural\Adapter\Payment\PayPalGateway;
-use App\Structural\Adapter\Payment\StripeApi;
-use App\Structural\Adapter\Payment\StripeGateway;
 
 it('can process payment via PayPal', function () {
     $payPalApi = new PayPalApi();
