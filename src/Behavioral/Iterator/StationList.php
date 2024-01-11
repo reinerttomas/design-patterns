@@ -24,7 +24,7 @@ class StationList implements Countable, Iterator
     public function removeStation(RadioStation $stationToRemove): void
     {
         $this->stations = array_filter(
-            $this->stations, fn (RadioStation $station) => $station !== $stationToRemove
+            $this->stations, fn (RadioStation $station) => $station->frequency !== $stationToRemove->frequency
         );
     }
 
