@@ -8,6 +8,11 @@ use App\Behavioral\Strategy\Payment\Model\Client;
 
 class OrderTotalDiscountProcessor implements PaymentProcessor
 {
+    public function supports(Client $client): bool
+    {
+        return true;
+    }
+
     public function handle(Client $client, float $amount): float
     {
         if ($amount > 1000) {

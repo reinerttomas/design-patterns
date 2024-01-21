@@ -8,5 +8,7 @@ use App\Behavioral\Strategy\Payment\Model\Client;
 
 interface PaymentProcessor
 {
+    public function supports(Client $client): bool;
+
     public function handle(Client $client, float $amount): float;
 }

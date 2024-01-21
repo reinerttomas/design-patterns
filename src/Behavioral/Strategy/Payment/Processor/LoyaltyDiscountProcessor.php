@@ -8,6 +8,11 @@ use App\Behavioral\Strategy\Payment\Model\Client;
 
 class LoyaltyDiscountProcessor implements PaymentProcessor
 {
+    public function supports(Client $client): bool
+    {
+        return $client->loyaltyTier()->isGold() || $client->loyaltyTier()->isSilver();
+    }
+
     public function handle(Client $client, float $amount): float
     {
         if ($client->loyaltyTier()->isGold()) {

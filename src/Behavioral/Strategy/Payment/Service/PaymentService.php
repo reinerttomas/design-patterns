@@ -24,7 +24,9 @@ class PaymentService
         $finalAmount = $amount;
 
         foreach ($this->processors as $processor) {
-            $finalAmount = $processor->handle($client, $finalAmount);
+            if ($processor->supports($client)) {
+                $finalAmount = $processor->handle($client, $finalAmount);
+            }
         }
 
         return $this->transactionService->create($client, $finalAmount);

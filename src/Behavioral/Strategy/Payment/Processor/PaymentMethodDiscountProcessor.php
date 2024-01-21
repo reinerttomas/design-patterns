@@ -8,6 +8,11 @@ use App\Behavioral\Strategy\Payment\Model\Client;
 
 class PaymentMethodDiscountProcessor implements PaymentProcessor
 {
+    public function supports(Client $client): bool
+    {
+        return $client->paymentMethod()->isCreditCard() || $client->paymentMethod()->isDigitalWallet();
+    }
+
     public function handle(Client $client, float $amount): float
     {
         if ($client->paymentMethod()->isCreditCard()) {
