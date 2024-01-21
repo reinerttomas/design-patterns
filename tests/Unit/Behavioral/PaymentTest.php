@@ -12,7 +12,7 @@ use App\Behavioral\Strategy\Payment\PromotionalPeriod;
 use App\Behavioral\Strategy\Payment\Subscription;
 use App\Behavioral\Strategy\Payment\TransactionService;
 
-it('should provide a loyalty discount based on client tier', function (LoyaltyTier $loyaltyTier, float $amount, float $finalAmount) {
+it('should apply loyalty discount based on client tier', function (LoyaltyTier $loyaltyTier, float $amount, float $finalAmount) {
     $paymentService = new PaymentService(new TransactionService());
     $client = new Client(
         loyaltyTier: $loyaltyTier,
@@ -40,7 +40,7 @@ it('should provide a loyalty discount based on client tier', function (LoyaltyTi
     ],
 ]);
 
-it('should provide an extra 8% discount when a purchase history is greater than 5', function (int $purchaseHistory, float $amount, float $finalAmount) {
+it('should apply purchase history discount when it is greater than 5', function (int $purchaseHistory, float $amount, float $finalAmount) {
     $paymentService = new PaymentService(new TransactionService());
     $client = new Client(
         loyaltyTier: LoyaltyTier::BRONZE,
@@ -64,7 +64,7 @@ it('should provide an extra 8% discount when a purchase history is greater than 
     ],
 ]);
 
-it('should provide a discount based on the total amount', function (float $amount, float $finalAmount) {
+it('should apply discount based on the total amount', function (float $amount, float $finalAmount) {
     $paymentService = new PaymentService(new TransactionService());
     $client = new Client(
         loyaltyTier: LoyaltyTier::BRONZE,
@@ -93,7 +93,7 @@ it('should provide a discount based on the total amount', function (float $amoun
     ],
 ]);
 
-it('should provide a discount based on a payment method', function (PaymentMethod $paymentMethod, float $amount, float $finalAmount) {
+it('should apply a discount based on a payment method', function (PaymentMethod $paymentMethod, float $amount, float $finalAmount) {
     $paymentService = new PaymentService(new TransactionService());
     $client = new Client(
         loyaltyTier: LoyaltyTier::BRONZE,
@@ -121,7 +121,7 @@ it('should provide a discount based on a payment method', function (PaymentMetho
     ],
 ]);
 
-it('should provide 20% discount with referral code', function (?string $referralCode, float $amount, float $finalAmount) {
+it('should apply a discount with referral code', function (?string $referralCode, float $amount, float $finalAmount) {
     $paymentService = new PaymentService(new TransactionService());
     $client = new Client(
         loyaltyTier: LoyaltyTier::BRONZE,
@@ -145,7 +145,7 @@ it('should provide 20% discount with referral code', function (?string $referral
     ],
 ]);
 
-it('should provide 20% discount during holiday sale', function (?PromotionalPeriod $promotionalPeriod, float $amount, float $finalAmount) {
+it('should apply discount during holiday sale', function (?PromotionalPeriod $promotionalPeriod, float $amount, float $finalAmount) {
     $paymentService = new PaymentService(new TransactionService());
     $client = new Client(
         loyaltyTier: LoyaltyTier::BRONZE,
@@ -169,7 +169,7 @@ it('should provide 20% discount during holiday sale', function (?PromotionalPeri
     ],
 ]);
 
-it('should provide 15% discount for the first purchase', function (bool $isFirstPurchase, float $amount, float $finalAmount) {
+it('should apply discount for the first purchase', function (bool $isFirstPurchase, float $amount, float $finalAmount) {
     $paymentService = new PaymentService(new TransactionService());
     $client = new Client(
         loyaltyTier: LoyaltyTier::BRONZE,
@@ -193,7 +193,7 @@ it('should provide 15% discount for the first purchase', function (bool $isFirst
     ],
 ]);
 
-it('should provide discount based on the type of subscription', function (?Subscription $subscription, float $amount, float $finalAmount) {
+it('should apply discount based on the type of subscription', function (?Subscription $subscription, float $amount, float $finalAmount) {
     $paymentService = new PaymentService(new TransactionService());
     $client = new Client(
         loyaltyTier: LoyaltyTier::BRONZE,
