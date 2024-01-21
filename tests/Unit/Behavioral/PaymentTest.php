@@ -8,6 +8,7 @@ use App\Behavioral\Strategy\Payment\Client;
 use App\Behavioral\Strategy\Payment\LoyaltyTier;
 use App\Behavioral\Strategy\Payment\PaymentMethod;
 use App\Behavioral\Strategy\Payment\PaymentService;
+use App\Behavioral\Strategy\Payment\PromotionalPeriod;
 use App\Behavioral\Strategy\Payment\Subscription;
 use App\Behavioral\Strategy\Payment\TransactionService;
 
@@ -144,7 +145,7 @@ it('should provide 20% discount with referral code', function (?string $referral
     ],
 ]);
 
-it('should provide 20% discount during holiday sale', function (?string $promotionalPeriod, float $amount, float $finalAmount) {
+it('should provide 20% discount during holiday sale', function (?PromotionalPeriod $promotionalPeriod, float $amount, float $finalAmount) {
     $paymentService = new PaymentService(new TransactionService());
     $client = new Client(
         loyaltyTier: LoyaltyTier::BRONZE,
@@ -162,7 +163,7 @@ it('should provide 20% discount during holiday sale', function (?string $promoti
         'finalAmount' => 100,
     ],
     [
-        'promotionalPeriod' => 'HolidaySale',
+        'promotionalPeriod' => PromotionalPeriod::HOLIDAY_SALE,
         'amount' => 100,
         'finalAmount' => 80,
     ],

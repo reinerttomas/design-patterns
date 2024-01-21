@@ -11,7 +11,7 @@ class Client
         private PaymentMethod $paymentMethod,
         private int $purchaseHistory = 0,
         private ?string $referralCode = null,
-        private ?string $promotionalPeriod = null,
+        private ?PromotionalPeriod $promotionalPeriod = null,
         private bool $isFirstPurchase = false,
         private ?Subscription $subscription = null,
         private ?CustomerSegment $customerSegment = null,
@@ -38,7 +38,7 @@ class Client
         return $this->referralCode;
     }
 
-    public function promotionalPeriod(): ?string
+    public function promotionalPeriod(): ?PromotionalPeriod
     {
         return $this->promotionalPeriod;
     }
