@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Behavioral;
 
 use App\Behavioral\Strategy\Payment\Client;
+use App\Behavioral\Strategy\Payment\CustomerSegment;
 use App\Behavioral\Strategy\Payment\LoyaltyTier;
 use App\Behavioral\Strategy\Payment\PaymentMethod;
 use App\Behavioral\Strategy\Payment\PaymentService;
@@ -221,3 +222,21 @@ it('should apply discount based on the type of subscription', function (?Subscri
         'finalAmount' => 80,
     ],
 ]);
+
+it('should apply loyalty, purchase history, payment method, referral code, subscription, customer segment', function () {
+    $paymentService = new PaymentService(new TransactionService());
+    $client = new Client(
+        loyaltyTier: LoyaltyTier::GOLD,
+        paymentMethod: PaymentMethod::CREDIT_CARD,
+        purchaseHistory: 50,
+        referralCode: 'code',
+        promotionalPeriod: PromotionalPeriod::HOLIDAY_SALE,
+        isFirstPurchase: false,
+        subscription: Subscription::PREMIUM,
+        customerSegment: CustomerSegment::VIP,
+    );
+
+    $transaction = $paymentService->resolvePayment($client, 1000);
+
+    expect($transaction->amount())->toBe(308.0955);
+});

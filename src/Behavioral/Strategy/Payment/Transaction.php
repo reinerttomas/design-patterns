@@ -19,6 +19,6 @@ class Transaction
 
     public function amount(): float
     {
-        return $this->amount;
+        return round($this->amount, 4);
     }
 }
