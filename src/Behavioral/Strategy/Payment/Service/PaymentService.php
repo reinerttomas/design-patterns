@@ -2,7 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Behavioral\Strategy\Payment;
+namespace App\Behavioral\Strategy\Payment\Service;
+
+use App\Behavioral\Strategy\Payment\Enum\CustomerSegment;
+use App\Behavioral\Strategy\Payment\Enum\LoyaltyTier;
+use App\Behavioral\Strategy\Payment\Enum\PaymentMethod;
+use App\Behavioral\Strategy\Payment\Enum\PromotionalPeriod;
+use App\Behavioral\Strategy\Payment\Enum\Subscription;
+use App\Behavioral\Strategy\Payment\Model\Client;
+use App\Behavioral\Strategy\Payment\Model\Transaction;
 
 class PaymentService
 {

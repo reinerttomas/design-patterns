@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Behavioral;
 
-use App\Behavioral\Strategy\Payment\Client;
-use App\Behavioral\Strategy\Payment\CustomerSegment;
-use App\Behavioral\Strategy\Payment\LoyaltyTier;
-use App\Behavioral\Strategy\Payment\PaymentMethod;
-use App\Behavioral\Strategy\Payment\PaymentService;
-use App\Behavioral\Strategy\Payment\PromotionalPeriod;
-use App\Behavioral\Strategy\Payment\Subscription;
-use App\Behavioral\Strategy\Payment\TransactionService;
+use App\Behavioral\Strategy\Payment\Enum\CustomerSegment;
+use App\Behavioral\Strategy\Payment\Enum\LoyaltyTier;
+use App\Behavioral\Strategy\Payment\Enum\PaymentMethod;
+use App\Behavioral\Strategy\Payment\Enum\PromotionalPeriod;
+use App\Behavioral\Strategy\Payment\Enum\Subscription;
+use App\Behavioral\Strategy\Payment\Model\Client;
+use App\Behavioral\Strategy\Payment\Service\PaymentService;
+use App\Behavioral\Strategy\Payment\Service\TransactionService;
 
 it('should apply loyalty discount based on client tier', function (LoyaltyTier $loyaltyTier, float $amount, float $finalAmount) {
     $paymentService = new PaymentService(new TransactionService());

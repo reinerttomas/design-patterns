@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Behavioral\Strategy\Payment;
+namespace App\Behavioral\Strategy\Payment\Enum;
 
 enum PromotionalPeriod: string
 {
