@@ -10,17 +10,42 @@ use App\Behavioral\Strategy\Payment\Enum\PaymentMethod;
 use App\Behavioral\Strategy\Payment\Enum\PromotionalPeriod;
 use App\Behavioral\Strategy\Payment\Enum\Subscription;
 use App\Behavioral\Strategy\Payment\Model\Client;
+use App\Behavioral\Strategy\Payment\Processor\CustomerSegmentDiscountProcessor;
+use App\Behavioral\Strategy\Payment\Processor\FirstPurchaseDiscountProcessor;
+use App\Behavioral\Strategy\Payment\Processor\LoyaltyDiscountProcessor;
+use App\Behavioral\Strategy\Payment\Processor\OrderTotalDiscountProcessor;
+use App\Behavioral\Strategy\Payment\Processor\PaymentMethodDiscountProcessor;
+use App\Behavioral\Strategy\Payment\Processor\PromotionalDiscountProcessor;
+use App\Behavioral\Strategy\Payment\Processor\PurchaseHistoryDiscountProcessor;
+use App\Behavioral\Strategy\Payment\Processor\ReferralDiscountProcessor;
+use App\Behavioral\Strategy\Payment\Processor\SubscriptionDiscountProcessor;
 use App\Behavioral\Strategy\Payment\Service\PaymentService;
 use App\Behavioral\Strategy\Payment\Service\TransactionService;
 
+beforeEach(function () {
+    $transactionService = new TransactionService();
+    $paymentProcessors = [
+        new LoyaltyDiscountProcessor(),
+        new PurchaseHistoryDiscountProcessor(),
+        new OrderTotalDiscountProcessor(),
+        new PaymentMethodDiscountProcessor(),
+        new ReferralDiscountProcessor(),
+        new PromotionalDiscountProcessor(),
+        new FirstPurchaseDiscountProcessor(),
+        new SubscriptionDiscountProcessor(),
+        new CustomerSegmentDiscountProcessor(),
+    ];
+
+    $this->paymentService = new PaymentService($transactionService, $paymentProcessors);
+});
+
 it('should apply loyalty discount based on client tier', function (LoyaltyTier $loyaltyTier, float $amount, float $finalAmount) {
-    $paymentService = new PaymentService(new TransactionService());
     $client = new Client(
         loyaltyTier: $loyaltyTier,
         paymentMethod: PaymentMethod::CASH,
     );
 
-    $transaction = $paymentService->resolvePayment($client, $amount);
+    $transaction = $this->paymentService->resolvePayment($client, $amount);
 
     expect($transaction->amount())->toBe($finalAmount);
 })->with([
@@ -42,14 +67,13 @@ it('should apply loyalty discount based on client tier', function (LoyaltyTier $
 ]);
 
 it('should apply purchase history discount when it is greater than 5', function (int $purchaseHistory, float $amount, float $finalAmount) {
-    $paymentService = new PaymentService(new TransactionService());
     $client = new Client(
         loyaltyTier: LoyaltyTier::BRONZE,
         paymentMethod: PaymentMethod::CASH,
         purchaseHistory: $purchaseHistory,
     );
 
-    $transaction = $paymentService->resolvePayment($client, $amount);
+    $transaction = $this->paymentService->resolvePayment($client, $amount);
 
     expect($transaction->amount())->toBe($finalAmount);
 })->with([
@@ -66,13 +90,12 @@ it('should apply purchase history discount when it is greater than 5', function 
 ]);
 
 it('should apply discount based on the total amount', function (float $amount, float $finalAmount) {
-    $paymentService = new PaymentService(new TransactionService());
     $client = new Client(
         loyaltyTier: LoyaltyTier::BRONZE,
         paymentMethod: PaymentMethod::CASH,
     );
 
-    $transaction = $paymentService->resolvePayment($client, $amount);
+    $transaction = $this->paymentService->resolvePayment($client, $amount);
 
     expect($transaction->amount())->toBe($finalAmount);
 })->with([
@@ -95,13 +118,12 @@ it('should apply discount based on the total amount', function (float $amount, f
 ]);
 
 it('should apply a discount based on a payment method', function (PaymentMethod $paymentMethod, float $amount, float $finalAmount) {
-    $paymentService = new PaymentService(new TransactionService());
     $client = new Client(
         loyaltyTier: LoyaltyTier::BRONZE,
         paymentMethod: $paymentMethod,
     );
 
-    $transaction = $paymentService->resolvePayment($client, $amount);
+    $transaction = $this->paymentService->resolvePayment($client, $amount);
 
     expect($transaction->amount())->toBe($finalAmount);
 })->with([
@@ -123,14 +145,13 @@ it('should apply a discount based on a payment method', function (PaymentMethod 
 ]);
 
 it('should apply a discount with referral code', function (?string $referralCode, float $amount, float $finalAmount) {
-    $paymentService = new PaymentService(new TransactionService());
     $client = new Client(
         loyaltyTier: LoyaltyTier::BRONZE,
         paymentMethod: PaymentMethod::CASH,
         referralCode: $referralCode,
     );
 
-    $transaction = $paymentService->resolvePayment($client, $amount);
+    $transaction = $this->paymentService->resolvePayment($client, $amount);
 
     expect($transaction->amount())->toBe($finalAmount);
 })->with([
@@ -147,14 +168,13 @@ it('should apply a discount with referral code', function (?string $referralCode
 ]);
 
 it('should apply discount during holiday sale', function (?PromotionalPeriod $promotionalPeriod, float $amount, float $finalAmount) {
-    $paymentService = new PaymentService(new TransactionService());
     $client = new Client(
         loyaltyTier: LoyaltyTier::BRONZE,
         paymentMethod: PaymentMethod::CASH,
         promotionalPeriod: $promotionalPeriod,
     );
 
-    $transaction = $paymentService->resolvePayment($client, $amount);
+    $transaction = $this->paymentService->resolvePayment($client, $amount);
 
     expect($transaction->amount())->toBe($finalAmount);
 })->with([
@@ -171,14 +191,13 @@ it('should apply discount during holiday sale', function (?PromotionalPeriod $pr
 ]);
 
 it('should apply discount for the first purchase', function (bool $isFirstPurchase, float $amount, float $finalAmount) {
-    $paymentService = new PaymentService(new TransactionService());
     $client = new Client(
         loyaltyTier: LoyaltyTier::BRONZE,
         paymentMethod: PaymentMethod::CASH,
         isFirstPurchase: $isFirstPurchase,
     );
 
-    $transaction = $paymentService->resolvePayment($client, $amount);
+    $transaction = $this->paymentService->resolvePayment($client, $amount);
 
     expect($transaction->amount())->toBe($finalAmount);
 })->with([
@@ -195,14 +214,13 @@ it('should apply discount for the first purchase', function (bool $isFirstPurcha
 ]);
 
 it('should apply discount based on the type of subscription', function (?Subscription $subscription, float $amount, float $finalAmount) {
-    $paymentService = new PaymentService(new TransactionService());
     $client = new Client(
         loyaltyTier: LoyaltyTier::BRONZE,
         paymentMethod: PaymentMethod::CASH,
         subscription: $subscription,
     );
 
-    $transaction = $paymentService->resolvePayment($client, $amount);
+    $transaction = $this->paymentService->resolvePayment($client, $amount);
 
     expect($transaction->amount())->toBe($finalAmount);
 })->with([
@@ -224,7 +242,6 @@ it('should apply discount based on the type of subscription', function (?Subscri
 ]);
 
 it('should apply loyalty, purchase history, payment method, referral code, subscription, customer segment', function () {
-    $paymentService = new PaymentService(new TransactionService());
     $client = new Client(
         loyaltyTier: LoyaltyTier::GOLD,
         paymentMethod: PaymentMethod::CREDIT_CARD,
@@ -236,7 +253,7 @@ it('should apply loyalty, purchase history, payment method, referral code, subsc
         customerSegment: CustomerSegment::VIP,
     );
 
-    $transaction = $paymentService->resolvePayment($client, 1000);
+    $transaction = $this->paymentService->resolvePayment($client, 1000);
 
     expect($transaction->amount())->toBe(308.0955);
 });
